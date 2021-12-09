@@ -4,9 +4,13 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,8 +25,10 @@ import com.app.entity.Employee;
 import com.app.service.EmployeeService;
 
 @RestController
-@RequestMapping("/emp")
+@RequestMapping("/emp") 
 public class EmployeeController {
+	
+	Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@Autowired
 	private EmployeeService empService;
@@ -32,7 +38,7 @@ public class EmployeeController {
 		throw new RuntimeException("path is incorrect..");
 	}
 	
-	@PostMapping
+	@PostMapping(value="/create",produces = "application/json", consumes = "application/json")
 	public ResponseEntity<Employee> createEmployee(@Valid @RequestBody Employee emp) {
 	
 		empService.createEmployee(emp);
@@ -62,7 +68,7 @@ public class EmployeeController {
 	
 
 	@PutMapping
-	public ResponseEntity<Employee> updateEmpDetails(Employee emp) {
+	public ResponseEntity<Employee> updateEmpDetails(@Valid @RequestBody Employee emp) {
 
 		Employee resObj = empService.updateEmpDetails(emp);
 		return new ResponseEntity<Employee>(resObj,HttpStatus.OK);
@@ -77,20 +83,21 @@ public class EmployeeController {
 	}
 	
 	
-	@GetMapping("/{address}")
+	@GetMapping("/findbyAddress/{address}")
 	public ResponseEntity<List<Employee>> searchByAddress(@PathVariable("address") String address) {
 		
 		List<Employee> empListByName = empService.searchByAddress(address);
 		return new ResponseEntity<List<Employee>>(empListByName, HttpStatus.OK);
 	}
 	
-	@GetMapping("/{name}")
+	@GetMapping("/findByName/{name}")
 	public ResponseEntity<List<Employee>> findByEmpName(@PathVariable("name") String name) {
 		
-		empService.findByEmpName(name);
+		logger.info("indByName/{name} :: "+name);
 		
+		List<Employee> empList = empService.findByEmpName(name);
 		
-		return null;
+		return new ResponseEntity<List<Employee>>(empList, HttpStatus.OK);
 	}
 	
 	

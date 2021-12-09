@@ -14,7 +14,7 @@ public interface EmployeeRepo extends JpaRepository<Employee, Long>{
 
 	public List<Employee> findByAddress(String address);
 
-	@Query(value = "select e from Employee e where e.firstName= :name or e.lastName= :name")
+	@Query(nativeQuery = true,value = "SELECT * FROM TBL_EMPLOYEES WHERE FIRST_NAME LIKE '%:name%'")
 	public List<Employee> findByEmpName(@Param("name") String name);
 
 }

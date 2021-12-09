@@ -65,7 +65,9 @@ public class EmployeeService {
 	
 	
 	public List<Employee> findByEmpName(String name){
-		return empRepo.findByEmpName(name);
+		List<Employee> empList = empRepo.findByEmpName(name);
+		logger.info("Emp List :: "+empList);
+		return empList;
  	}
 
 }
