@@ -1,4 +1,4 @@
-package com.gs.web;
+package com.gs.web.config;
 
 import org.springframework.context.annotation.Configuration;
 
