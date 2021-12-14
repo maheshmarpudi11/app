@@ -23,7 +23,6 @@ public class FeignClientController {
 	private EmployeeClient empClient;
 	
 	@GetMapping("/list")
-	@HystrixCommand(fallbackMethod = "")
 	public Object getEmpList() {
 		logger.info("FeignClientController -> getEmplList() ");
 		return empClient.getEmployees();

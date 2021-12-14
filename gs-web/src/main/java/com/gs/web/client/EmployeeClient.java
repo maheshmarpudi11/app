@@ -26,19 +26,16 @@ public interface EmployeeClient {
 
 		@Override
 		public Object getEmployees() {
-			
 			return new String("Employee Servicers are not working..");
 		}
 
 		@Override
 		public Object createEmployee(Employee emp) {
-			// TODO Auto-generated method stub
 			return new String("Employee Servicers are not working..");
 		}
 
 		@Override
 		public Object getEmployeeById(Long id) {
-			// TODO Auto-generated method stub
 			return new String("Employee Servicers are not working..");
 		}
 		
