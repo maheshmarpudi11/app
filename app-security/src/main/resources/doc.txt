@@ -1,0 +1,92 @@
+
+Step:1 -- Default form-login 
+----------------------------
+- Add below dependencies in pom.xml
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+- Run main class file 
+- Test the default login implemented by Spring Boot
+- Default username : user, password : value generated in console
+- If login is not working then, Test login in incognito mode in chrome.
+- After login access for locahost:8080/logout URL.
+
+Step:2 -- override default username and password.
+-------------------------------------------------
+-  Add below key and values properties in application.properties
+	spring.security.user.name=admin
+	spring.security.user.password=password
+
+- Run the main class and test the Application.
+
+
+Step:3 -- Adding inMemory users to Authenticate 
+-----------------------------------------------
+- Create new Class <SecurityConfig> extends WebSecurityConfigurerAdapter 
+- Override configure(auth) methods and add inMemory users.
+- test the application using form-based authentication.
+
+
+Step:4 -- Restricing access to URLs
+-----------------------------------
+- Add inMemory users with roles.
+
+	auth.inMemoryAuthentication()
+			.withUser("test").password("{noop}test123").roles("USER")
+			.and()
+			.withUser("read").password("{noop}read123").roles("READ")
+			.and()
+			.withUser("admin").password("{noop}admin123").roles("ADMIN");
+
+- Override configure(HttpSecurity) method and add below code
+	
+	http.authorizeRequests()
+			.antMatchers("/admin/*").hasAnyRole("ADMIN")
+			.antMatchers("/user/*").hasRole("USER")
+			.antMatchers("/*").hasRole("READ")
+			.antMatchers("/").permitAll()
+			.and()
+			.formLogin();
+			
+- Test by using different URL that user to login			
+
+
+Step:4 -- Apply Security for API's
+--------------------------------
+- Override configure(HttpSecurity) method and add below code
+	
+	http.authorizeRequests()
+			.antMatchers("/admin/*").hasAnyRole("ADMIN")
+			.antMatchers("/user/*").hasRole("USER")
+			.antMatchers("/*").hasRole("READ")
+			.antMatchers("/").permitAll()
+			.and()
+			.httpBasic();
+
+- Test by using different URL with user in postman	
+		
+
+Step:5 -- Implementing both Basic Auth and FormLogin.
+-----------------------------------------------------
+
+		http.authorizeRequests()
+		  	.antMatchers("/admin/*").hasAnyRole("ADMIN")
+		    .antMatchers("/user/*").hasRole("USER") 
+		    .antMatchers("/").permitAll() 
+		    .and()
+		    .formLogin();
+		  
+			
+		  http.authorizeRequests()
+		  	.antMatchers("/api/*").hasAnyRole("API") 
+		  	.and()
+			.httpBasic();
+
+
